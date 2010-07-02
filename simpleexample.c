@@ -7,15 +7,22 @@
 
 typedef GLfloat point[3]; 
 
-point v[4] ={{0.0, 0.0, 1.0}, 
-             {0.0, 0.942809, -0.333333}, 
-             {-0.816497, -0.471405, -0.333333}, 
-             {0.816497, -0.471405, -0.333333}};
-
+point cube[8] = {
+		{-0.5, -0.5, 1.0},
+		{0.5, -0.5, 1.0},
+		{0.5, 0.5, 1.0},
+		{-0.5, 0.5, 1,0},
+	{-0.5, -0.5, -1.0},
+	{0.5, -0.5, -1.0},
+	{0.5, 0.5, -1.0},
+	{-0.5, 0.5, -1,0}
+		
+};
 
 GLvoid DrawGLScene(void);
-void tetrahedron(void);
-void triangle(point a, point b, point c);
+void drawCube(void);
+void square(point a, point b, point c, point d);
+void squareOffset(point a, point b, point c, point d, float offset);
 
 int main(int argc, char **argv)
 {
@@ -37,22 +44,26 @@ GLvoid DrawGLScene(void)
   glColor3f(1.0,1.0,1.0); 
   glLoadIdentity(); 
 
-  tetrahedron(); 
+  drawCube(); 
   glutSwapBuffers();
 }
 
-void triangle( point a, point b, point c) 
-{ 
+void drawCube()
+{
+  square(cube[0], cube[1], cube[2], cube[3]);
+  square(cube[4], cube[5], cube[6], cube[7]);
+  square(cube[1], cube[2], cube[5], cube[6]); //right face
+  square(cube[0], cube[3], cube[7], cube[4]); //left face
+  square(cube[2], cube[3], cube[6], cube[7]); //top
+  square(cube[0], cube[1], cube[5], cube[4]); //bottom
+}
+
+void square(point a, point b, point c, point d) 
+{
   glBegin(GL_LINE_LOOP);
   glVertex3fv(a); 
   glVertex3fv(b); 
   glVertex3fv(c); 
-  glEnd(); 
+  glVertex3fv(d); 
+  glEnd();     
 }
-
-void tetrahedron(void) 
-{ 
-  triangle(v[0], v[1], v[2]); 
-  triangle(v[3], v[2], v[1]); 
-  triangle(v[0], v[2], v[3]); 
-} 
